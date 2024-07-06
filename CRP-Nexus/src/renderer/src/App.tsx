@@ -1,14 +1,18 @@
-import Login from "./components/login/Login";
-import Loading from "./components/loading/Loading";
+// App.tsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/login/Login';
+import Loading from './components/loading/Loading';
 
-function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
-
+const App: React.FC = () => {
   return (
-    <>
-      <Loading />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Loading />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
