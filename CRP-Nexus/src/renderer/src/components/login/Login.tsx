@@ -1,9 +1,11 @@
 import React from "react";
+import { Input } from "../../@/componentsui/ui/input";
+
 
 const Login: React.FC = () => {
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-screen items-center justify-center px-6 py-12 lg:px-8 ">
         <div className="w-full max-w-md space-y-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
@@ -28,7 +30,7 @@ const Login: React.FC = () => {
                   Email address
                 </label>
                 <div className="mt-2">
-                  <input
+                  <Input
                     id="email"
                     name="email"
                     type="email"
