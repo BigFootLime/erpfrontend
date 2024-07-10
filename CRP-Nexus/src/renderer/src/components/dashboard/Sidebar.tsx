@@ -25,6 +25,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
+import Dashboard from "./Dashboard";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
@@ -48,7 +49,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Dashboard() {
+export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -334,7 +335,10 @@ export default function Dashboard() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">HELLO IDIOTTTT</div>
+            <div className="px-4 sm:px-6 lg:px-8">
+              <Dashboard />
+            </div>
+
           </main>
         </div>
       </div>
