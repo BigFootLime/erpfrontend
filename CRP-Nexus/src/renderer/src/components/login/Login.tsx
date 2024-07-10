@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import FormInput from "../ui/FormInput";
 
 interface LoginFormValues {
@@ -19,6 +20,7 @@ const Login: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const defaultValue = getDefaultValues();
+  const history = useHistory(); // Use useHistory hook
 
   const {
     register,
@@ -30,8 +32,7 @@ const Login: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-    setLoading({ loginemail: true });
-    setLoading({ password: true });
+    setLoading({ loginemail: true, password: true });
     setError(null);
 
     try {
@@ -53,11 +54,11 @@ const Login: React.FC = () => {
       const result = await response.json();
       console.log(result);
       // handle successful login (e.g., store token, redirect to dashboard, etc.)
+      history.push("/dashboard"); // Redirect to Dashboard
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading({ loginemail: false });
-      setLoading({ password: false });
+      setLoading({ loginemail: false, password: false });
     }
   };
 
