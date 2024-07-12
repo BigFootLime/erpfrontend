@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../ui/FormInput";
 
 interface LoginFormValues {
@@ -20,7 +20,7 @@ const Login: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const defaultValue = getDefaultValues();
-  const history = useHistory(); // Use useHistory hook
+  const navigate = useNavigate(); // Use useHistory hook
 
   const {
     register,
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: data.Loginemail,
+          username: data.Loginemail,
           password: data.password,
         }),
       });
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
       const result = await response.json();
       console.log(result);
       // handle successful login (e.g., store token, redirect to dashboard, etc.)
-      history.push("/dashboard"); // Redirect to Dashboard
+      navigate("/dashboard"); // Redirect to Dashboard
     } catch (err) {
       setError(err.message);
     } finally {
@@ -77,7 +77,7 @@ const Login: React.FC = () => {
             className="mx-auto h-20 w-auto sm:h-24 lg:h-28"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-            Sign in to your account
+            Se connecter à votre compte
           </h2>
         </div>
 
@@ -88,10 +88,10 @@ const Login: React.FC = () => {
                 <FormInput
                   loading={loading.loginemail}
                   register={register}
-                  label={"Email address"}
+                  label={"Identifiant"}
                   name="Loginemail"
-                  type="email"
-                  validation={{ required: "Email is required" }}
+                  type="text"
+                  validation={{ required: "Username est requis" }}
                   error={errors.Loginemail}
                   classNameInput="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:!ring-indigo-500 sm:text-sm sm:leading-6"
                 />
@@ -102,10 +102,10 @@ const Login: React.FC = () => {
               <FormInput
                 loading={loading.password}
                 register={register}
-                label={"Password"}
+                label={"Mot de passe"}
                 name="password"
                 type="password"
-                validation={{ required: "Password is required" }}
+                validation={{ required: "Password est requis" }}
                 error={errors.password}
                 classNameInput="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:!ring-indigo-500 sm:text-sm sm:leading-6"
               />
@@ -118,18 +118,18 @@ const Login: React.FC = () => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
-                Sign in
+                Se connecter
               </button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-400">
-            Not a member?{" "}
+            Mot de passe / Identifiant oublié ?{" "}
             <a
-              href="#"
+              href="/request-password-reset"
               className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
             >
-              Start a 14 day free trial
+              Nouveau mot de passe
             </a>
           </p>
         </div>

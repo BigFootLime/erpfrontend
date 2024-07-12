@@ -6,11 +6,11 @@ import icon from "../../resources/CRPICON.png?asset";
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
     show: false,
     icon: icon,
-    autoHideMenuBar: true,
+    fullscreen: true,
+    autoHideMenuBar: false,
+
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
@@ -73,3 +73,4 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+// Set fullscreen mode
