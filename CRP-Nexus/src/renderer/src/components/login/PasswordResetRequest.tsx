@@ -1,4 +1,3 @@
-// PasswordResetRequest.tsx
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +7,12 @@ interface PasswordResetRequestFormValues {
   EmailForgetPassword: string;
 }
 
-const getDefaultValues = (): LoginFormValues => ({
+const getDefaultValues = (): PasswordResetRequestFormValues => ({
   EmailForgetPassword: "",
 });
 
 const PasswordResetRequest: React.FC = () => {
-  const [loading, setLoading] = useState({
-    EmailForgetPassword: false,
-  });
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -33,7 +30,7 @@ const PasswordResetRequest: React.FC = () => {
   const onSubmit: SubmitHandler<PasswordResetRequestFormValues> = async (
     data,
   ) => {
-    setLoading({ EmailForgetPassword: true });
+    setLoading(true);
     setError(null);
     setMessage(null);
 
@@ -55,7 +52,12 @@ const PasswordResetRequest: React.FC = () => {
         );
       }
 
-      setMessage("Recovery email sent. Please check your inbox.");
+      setMessage(
+        "E-mail de récupération envoyé. Veuillez vérifier votre boîte de réception.",
+      );
+      navigate("/reset-password", {
+        state: { email: data.EmailForgetPassword },
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -77,7 +79,7 @@ const PasswordResetRequest: React.FC = () => {
             <div>
               <div className="mt-2">
                 <FormInput
-                  loading={loading.EmailForgetPassword}
+                  loading={loading}
                   register={register}
                   label={"Adresse email"}
                   name="EmailForgetPassword"

@@ -5,6 +5,7 @@ import Loading from "./components/loading/Loading";
 import Sidebar from "./components/dashboard/Sidebar";
 import PasswordResetRequest from "./components/login/PasswordResetRequest";
 import PasswordReset from "./components/login/ResetPassword";
+import { Greeting } from "./components/dashboard/Greeting";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Loading />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/greeting" element={<Greeting />} />
         <Route path="/dashboard" element={<Sidebar />} />
         <Route
           path="/request-password-reset"

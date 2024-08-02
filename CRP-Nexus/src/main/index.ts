@@ -8,7 +8,7 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     show: false,
     icon: icon,
-    fullscreen: true,
+    fullscreen: false,
     autoHideMenuBar: false,
 
     ...(process.platform === "linux" ? { icon } : {}),

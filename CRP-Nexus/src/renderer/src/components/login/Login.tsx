@@ -20,7 +20,7 @@ const Login: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const defaultValue = getDefaultValues();
-  const navigate = useNavigate(); // Use useHistory hook
+  const navigate = useNavigate();
 
   const {
     register,
@@ -52,11 +52,14 @@ const Login: React.FC = () => {
       }
 
       const result = await response.json();
+      // Save the token and user ID in local storage
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("userId", result.userId);
       console.log(result);
-      // handle successful login (e.g., store token, redirect to dashboard, etc.)
-      navigate("/dashboard"); // Redirect to Dashboard
+      // Redirect to Dashboard
+      navigate("/greeting");
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
     } finally {
       setLoading({ loginemail: false, password: false });
     }

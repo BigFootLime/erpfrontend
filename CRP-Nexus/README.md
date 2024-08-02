@@ -32,9 +32,11 @@ $ pnpm build:mac
 # For Linux
 $ pnpm build:linux
 ```
+
 ## TO CREATE DATABASE
 
-### CREATE TABLE EN TETE DEVIS 
+### CREATE TABLE EN TETE DEVIS
+
 ```sql
 CREATE TABLE en_tete_devis (
     id_devis SERIAL PRIMARY KEY,  -- Primary key with auto-increment
@@ -52,4 +54,23 @@ CREATE TABLE en_tete_devis (
     id_client VARCHAR(100) NOT NULL,  -- Client name
     montant_total DECIMAL(10, 2) NOT NULL  -- Total amount
 	)
+
+	DO $$
+DECLARE
+    image_data bytea;
+    file_path text := 'K:\\ImgProfileKeenan.png';
+BEGIN
+    -- Read the image file into a bytea variable
+    image_data := pg_read_binary_file(file_path);
+
+    -- Update the photo column for all employees
+    UPDATE employee
+    SET photo = image_data;
+
+    -- If you want to update the photo column for a specific employee, use:
+    -- UPDATE employee
+    -- SET photo = image_data
+    -- WHERE employee_id = specific_employee_id;
+
+END $$;
 ```
