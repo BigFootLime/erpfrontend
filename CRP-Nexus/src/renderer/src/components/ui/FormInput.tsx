@@ -14,6 +14,7 @@ function FormInput({
   validation: propsValidation,
   placeholder: propsPlaceholder,
   error: propsError,
+  light: propsLight, // New prop
 }) {
   return (
     <div className="w-full">
@@ -21,6 +22,7 @@ function FormInput({
         label={propsLabel}
         name={propsName}
         required={propsValidation?.required}
+        className={`${propsLight ? "text-black" : ""}`} // Apply black text color if `light` is true
       />
       {propsLoading ? (
         <Skeleton className="w-full h-10" />
@@ -30,7 +32,7 @@ function FormInput({
           disabled={propsDisabled}
           type={propsType}
           {...propsRegister(propsName, propsValidation)}
-          className={`border border-indigo-500 rounded-md w-full hover:border-indigo-500 focus:border-indigo-500 ${
+          className={`border rounded-md w-full border-indigo-500 hover:border-indigo-500 focus:border-indigo-500 ${
             propsClassNameInput || ""
           } ${propsError ? "!border-red-500" : ""}`}
           placeholder={propsPlaceholder}

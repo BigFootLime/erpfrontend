@@ -12,33 +12,54 @@ import {
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
+  CalendarDaysIcon,
   ChartPieIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
+  CubeTransparentIcon,
   HomeIcon,
-  UsersIcon,
+  CurrencyEuroIcon,
+  WrenchScrewdriverIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
+
+import { LogOut, PackagePlus } from "lucide-react";
+
+// Import your components
 import Dashboard from "./Dashboard";
+import DevisLandingPage from "../devis/devisLandingPage";
 
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Devis et Facture", href: "#", icon: UsersIcon, current: false },
-  { name: "Outils", href: "#", icon: FolderIcon, current: false },
-  { name: "Planning", href: "#", icon: CalendarIcon, current: false },
-  { name: "Pièces", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
-];
-const teams = [
-  { id: 1, name: "Administration", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+  { name: "Dashboard", href: "#", icon: HomeIcon, component: "Dashboard" },
+  {
+    name: "Commande Client",
+    href: "#",
+    icon: PackagePlus,
+    component: "CommandeClient",
+  },
+  {
+    name: "Devis et Facture",
+    href: "#",
+    icon: CurrencyEuroIcon,
+    component: "Devis",
+  },
+  {
+    name: "Outils",
+    href: "/outils",
+    icon: WrenchScrewdriverIcon,
+    component: "Outils",
+  },
+  {
+    name: "Planning",
+    href: "#",
+    icon: CalendarDaysIcon,
+    component: "Planning",
+  },
+  { name: "Pièces", href: "#", icon: CubeTransparentIcon, component: "Pieces" },
+  { name: "Reports", href: "#", icon: ChartPieIcon, component: "Reports" },
 ];
 const userNavigation = [
   { name: "Mon profile", href: "#" },
@@ -53,6 +74,7 @@ export default function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userPhoto, setUserPhoto] = useState("");
   const [userName, setUserName] = useState({ firstname: "", lastname: "" });
+  const [currentView, setCurrentView] = useState("Dashboard"); // New state to manage current view
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -95,6 +117,18 @@ export default function Sidebar() {
   const handleSignOut = () => {
     localStorage.clear();
     window.location.href = "/login";
+  };
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case "Dashboard":
+        return <Dashboard />;
+      case "Devis":
+        return <DevisLandingPage />;
+      // Add more cases for other components
+      default:
+        return <Dashboard />;
+    }
   };
 
   return (
@@ -143,15 +177,16 @@ export default function Sidebar() {
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
-                      <ul role="list" className="-mx-2 space-y-1">
+                      <ul role="list" className="-mx-2 space-y-2">
                         {navigation.map((item) => (
                           <li key={item.name}>
                             <a
                               href={item.href}
+                              onClick={() => setCurrentView(item.component)} // Set the current view on click
                               className={classNames(
-                                item.current
-                                  ? "bg-gray-900 text-white"
-                                  : "text-gray-400 hover:bg-gray-900 hover:text-white",
+                                currentView === item.component
+                                  ? "bg-purple-950 text-white"
+                                  : "text-white hover:bg-purple-950 animate-in duration-150 bg-purple-700",
                                 "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                               )}
                             >
@@ -165,31 +200,7 @@ export default function Sidebar() {
                         ))}
                       </ul>
                     </li>
-                    <li>
-                      <div className="text-xs font-semibold leading-6 text-gray-400">
-                        Your teams
-                      </div>
-                      <ul role="list" className="-mx-2 mt-2 space-y-1">
-                        {teams.map((team) => (
-                          <li key={team.name}>
-                            <a
-                              href={team.href}
-                              className={classNames(
-                                team.current
-                                  ? "bg-gray-900 text-white"
-                                  : "text-gray-400 hover:bg-gray-900 hover:text-white",
-                                "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
-                              )}
-                            >
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-900 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                {team.initial}
-                              </span>
-                              <span className="truncate">{team.name}</span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
+
                     <li className="mt-auto">
                       <a
                         href="#"
@@ -199,7 +210,18 @@ export default function Sidebar() {
                           aria-hidden="true"
                           className="h-6 w-6 shrink-0"
                         />
-                        Settings
+                        Paramètres
+                      </a>
+                      <a
+                        href="#"
+                        className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-900 hover:text-white"
+                        onClick={handleSignOut}
+                      >
+                        <LogOut
+                          aria-hidden="true"
+                          className="h-6 w-6 shrink-0"
+                        />
+                        Quitter la session
                       </a>
                     </li>
                   </ul>
@@ -309,9 +331,7 @@ export default function Sidebar() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">
-              <Dashboard />
-            </div>
+            <div className="px-4 sm:px-6 lg:px-8">{renderCurrentView()}</div>
           </main>
         </div>
       </div>

@@ -6,6 +6,7 @@ import Sidebar from "./components/dashboard/Sidebar";
 import PasswordResetRequest from "./components/login/PasswordResetRequest";
 import PasswordReset from "./components/login/ResetPassword";
 import { Greeting } from "./components/dashboard/Greeting";
+import DevisLandingPage from "./components/devis/devisLandingPage";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/greeting" element={<Greeting />} />
         <Route path="/dashboard" element={<Sidebar />} />
+        <Route path="/devis" element={<DevisLandingPage />} />
         <Route
           path="/request-password-reset"
           element={<PasswordResetRequest />}

@@ -1,5 +1,10 @@
 import React, { useState, createContext, useContext } from "react";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  NavLink,
+} from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { cn } from "../../lib/utils";
@@ -264,12 +269,12 @@ const SidebarDemo = () => {
             </div>
           </SidebarBody>
         </Sidebar>
-        <Router>
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/logout" component={Logout} />
-        </Router>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
       </div>
     </Router>
   );
