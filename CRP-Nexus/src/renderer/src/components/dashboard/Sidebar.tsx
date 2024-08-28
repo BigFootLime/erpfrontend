@@ -330,7 +330,7 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <main className="py-10">
+          <main className="py-8">
             <div className="px-4 sm:px-6 lg:px-8">{renderCurrentView()}</div>
           </main>
         </div>
