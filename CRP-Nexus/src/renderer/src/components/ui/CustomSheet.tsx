@@ -26,6 +26,7 @@ interface CustomSheetProps {
   children?: React.ReactNode;
   backgroundColor?: string; // New prop for background color
   titleColor?: string; // New prop for title color
+  showTrigger?: boolean; // New prop to control trigger visibility
 }
 
 const CustomSheet: React.FC<CustomSheetProps> = ({
@@ -37,12 +38,11 @@ const CustomSheet: React.FC<CustomSheetProps> = ({
   triggerVariant = "outline",
   title = "Edit profile",
   description = "Make changes to your profile here. Click save when you're done.",
-  onSaveChanges,
   size = "w-[50%]",
-  closeOnSave = true,
   children,
   backgroundColor = "bg-neutral-50",
   titleColor = "text-black",
+  showTrigger = true, // Default to true
 }) => {
   return (
     <Sheet
@@ -51,9 +51,11 @@ const CustomSheet: React.FC<CustomSheetProps> = ({
       onOpenChange={onOpenChange}
       modal={modal}
     >
-      <SheetTrigger asChild>
-        <Button variant={triggerVariant}>{triggerLabel}</Button>
-      </SheetTrigger>
+      {showTrigger && (
+        <SheetTrigger asChild>
+          <Button variant={triggerVariant}>{triggerLabel}</Button>
+        </SheetTrigger>
+      )}
       <SheetContent className={`${size} ${backgroundColor}`}>
         <SheetHeader>
           <SheetTitle className={`${titleColor}`}>{title}</SheetTitle>
@@ -62,19 +64,7 @@ const CustomSheet: React.FC<CustomSheetProps> = ({
         {/* Separator */}
         <div className="border-b border-neutral-300 my-4"></div>
         <div className="grid gap-4 py-4">{children}</div>
-        <SheetFooter>
-          {closeOnSave ? (
-            <SheetClose asChild>
-              <Button type="submit" onClick={onSaveChanges}>
-                Save changes
-              </Button>
-            </SheetClose>
-          ) : (
-            <Button type="submit" onClick={onSaveChanges}>
-              Save changes
-            </Button>
-          )}
-        </SheetFooter>
+        <SheetFooter></SheetFooter>
       </SheetContent>
     </Sheet>
   );

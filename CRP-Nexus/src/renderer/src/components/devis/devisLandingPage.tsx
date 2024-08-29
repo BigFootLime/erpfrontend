@@ -141,20 +141,19 @@ const DevisLandingPage = () => {
         tableTitle="DEVIS CLIENTS"
         tooltipContent="Ajouter un devis"
       />
-      {isSheetOpen && (
-        <CustomSheet
-          title="Créer un nouveau devis"
-          description="Veuillez remplir les informations nécessaires pour créer un nouveau devis."
-          onSaveChanges={() => setIsSheetOpen(false)} // Example of closing the sheet after saving
-          open={isSheetOpen}
-          onOpenChange={setIsSheetOpen}
-          size="w-[90%] lg:w-[50%]"
-          backgroundColor="bg-gray-900"
-          titleColor="text-white"
-        >
-          <CreateDevisForm />
-        </CustomSheet>
-      )}
+      <CustomSheet
+        showTrigger={false}
+        title="Créer un nouveau devis"
+        description="Veuillez remplir les informations nécessaires pour créer un nouveau devis."
+        onSaveChanges={() => setIsSheetOpen(false)} // Example of closing the sheet after saving
+        open={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+        size="w-[90%] lg:w-[50%] h-full overflow-auto"
+        backgroundColor="bg-gray-900"
+        titleColor="text-white"
+      >
+        <CreateDevisForm />
+      </CustomSheet>
     </div>
   );
 };

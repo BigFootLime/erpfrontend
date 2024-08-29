@@ -60,7 +60,9 @@ interface DeployableTableProps {
   limitPerPage?: number; // Customizable limit per page
   showActions?: boolean; // Optional prop to show/hide actions column
   tableHeight?: string; // Prop to control table height
+  tableWidth?: string; // Prop to control table width
   containerHeight?: string; // Prop to control container height
+  containerWidth?: string; // Prop to control container width
   tableTitle?: string; // Prop to set table title
   tooltipContent?: string; // Prop to set tooltip content
   onAddNewAction?: () => void; // New prop to set different actions for the button
@@ -82,6 +84,8 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
   limitPerPage = 15, // Default limit per page
   showActions = true, // Default to show actions column
   tableHeight = "24rem", // Default table height
+  tableWidth = "100%", // Default table width
+  containerWidth = "100%", // Default container width
   containerHeight = "auto", // Default container height
   tableTitle = "Table Title",
   tooltipContent = "Ajouter un élément", // Default tooltip content
@@ -111,7 +115,7 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
 
   return (
     <div
-      className={`rounded-lg shadow-lg bg-neutral-400 p-4 ${containerHeight}`}
+      className={`rounded-lg shadow-lg bg-neutral-400 p-4  ${containerHeight} ${containerWidth}`}
     >
       {/* Toolbar */}
       <div className="flex justify-between items-center mb-4">
@@ -180,7 +184,7 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
 
       {/* Table Container for Scrollable Table */}
       <div
-        className={`overflow-auto ${tableHeight} border-2 border-neutral-600 rounded-md`}
+        className={`overflow-auto ${tableHeight} ${tableWidth} border-2 border-neutral-600 rounded-md`}
       >
         <table className="min-w-full table-auto">
           <thead>
