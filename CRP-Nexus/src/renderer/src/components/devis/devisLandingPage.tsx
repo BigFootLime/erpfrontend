@@ -102,17 +102,21 @@ const DevisLandingPage = () => {
     { key: "list", label: "List View", value: "list" },
   ];
   const columnsConfig = [
-    { key: "devis_id", label: "N° Devis" },
-    { key: "version", label: "Version" },
-    { key: "nom", label: "Nom Client" },
-    { key: "date_creation", label: "Date de Création" },
-    { key: "statut", label: "Statut" },
-    { key: "delai_livraison", label: "Delai de Livraion" },
-    { key: "interlocuteur", label: "Interlocuteur(-trice)" },
-    { key: "total_ht", label: "Total HTT" },
-    { key: "total_ttc", label: "Total TTC" },
-    { key: "conditions_speciales", label: "Conditions Speciales" },
-    { key: "remarques", label: "Remarques" },
+    { key: "devis_id", label: "N° Devis", width: "120px" },
+    { key: "version", label: "Version", width: "80px" },
+    { key: "client_nom", label: "Nom Client", width: "200px" },
+    { key: "date_creation", label: "Date de Création", width: "150px" },
+    { key: "statut", label: "Statut", width: "120px" },
+    { key: "delai_livraison", label: "Delai de Livraion", width: "150px" },
+    { key: "interlocuteur", label: "Interlocuteur(-trice)", width: "220px" },
+    { key: "total_ht", label: "Total HTT", width: "120px" },
+    { key: "total_ttc", label: "Total TTC", width: "120px" },
+    {
+      key: "conditions_speciales",
+      label: "Conditions Speciales",
+      width: "200px",
+    },
+    { key: "remarques", label: "Remarques", width: "300px" },
   ];
 
   const handleAddNew = () => {

@@ -1,54 +1,45 @@
-import React, { useState, useEffect } from "react";
-import classNames from "classnames";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   ArrowLeft,
   ArrowRight,
   Edit2,
-  Filter,
-  Plus,
   Trash2,
-  TrashIcon,
+  Plus,
+  Search,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../../@/componentsui/ui/select";
+import CustomAutoComplete from "./CustomAutoComplete"; // Import CustomAutoComplete
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../../@/componentsui/ui/tooltip";
+import { Skeleton } from "../../@/componentsui/ui/skeleton";
+import { Input } from "../../@/componentsui/ui/input";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableCaption,
+} from "../../@/componentsui/ui/table";
+import classNames from "classnames";
 
 interface ColumnConfig {
   key: string;
   label: string;
   sortable?: boolean;
   render?: (value: any, row: any) => React.ReactNode;
-}
-
-interface FilterConfig {
-  key: string;
-  label: string;
-  options: string[];
-}
-
-interface ViewOptionConfig {
-  key: string;
-  label: string;
-  value: string;
+  width?: string;
 }
 
 interface DeployableTableProps {
   data: any[];
   columnsConfig: ColumnConfig[];
-  filters: FilterConfig[];
-  viewOptions: ViewOptionConfig[];
+  filters: { key: string; label: string }[]; // Now used for autocomplete filtering
+  viewOptions: { key: string; label: string; value: string }[];
   onFilterChange: (filter: string) => void;
   onViewChange: (view: string) => void;
   onAddNew: () => void;
@@ -57,21 +48,22 @@ interface DeployableTableProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  limitPerPage?: number; // Customizable limit per page
-  showActions?: boolean; // Optional prop to show/hide actions column
-  tableHeight?: string; // Prop to control table height
-  tableWidth?: string; // Prop to control table width
-  containerHeight?: string; // Prop to control container height
-  containerWidth?: string; // Prop to control container width
-  tableTitle?: string; // Prop to set table title
-  tooltipContent?: string; // Prop to set tooltip content
-  onAddNewAction?: () => void; // New prop to set different actions for the button
+  limitPerPage?: number;
+  showActions?: boolean;
+  tableHeight?: string;
+  tableWidth?: string;
+  containerHeight?: string;
+  containerWidth?: string;
+  tableTitle?: string;
+  tooltipContent?: string;
+  loading?: boolean;
+  tableCaption?: string;
 }
 
 const DeployableTable: React.FC<DeployableTableProps> = ({
   data,
   columnsConfig,
-  filters,
+  filters, // Accept filters prop for autocomplete
   viewOptions,
   onFilterChange,
   onViewChange,
@@ -81,89 +73,116 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  limitPerPage = 15, // Default limit per page
-  showActions = true, // Default to show actions column
-  tableHeight = "24rem", // Default table height
-  tableWidth = "100%", // Default table width
-  containerWidth = "100%", // Default container width
-  containerHeight = "auto", // Default container height
+  limitPerPage = 15,
+  showActions = true,
+  tableHeight = "24rem",
+  tableWidth = "100%",
+  containerWidth = "100%",
+  containerHeight = "auto",
   tableTitle = "Table Title",
-  tooltipContent = "Ajouter un élément", // Default tooltip content
-  onAddNewAction = onAddNew, // Default action for the button
+  tooltipContent = "Ajouter un élément",
+  loading = false,
+  tableCaption,
 }) => {
   const [displayData, setDisplayData] = useState<any[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
-  const [selectedView, setSelectedView] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<string>(""); // Track the selected filter value
+  const [searchTerm, setSearchTerm] = useState<string>(""); // For search functionality
+  const [sortColumn, setSortColumn] = useState<string>(""); // For sorting functionality
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc"); // Track the sort direction
 
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * limitPerPage;
-    const paginatedData = data.slice(startIndex, startIndex + limitPerPage);
-    setDisplayData(paginatedData);
-  }, [data, currentPage, limitPerPage]);
-
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilter = event.target.value;
-    setSelectedFilter(newFilter);
-    onFilterChange(newFilter);
+  // Sorting logic
+  const handleSort = (columnKey: string) => {
+    if (sortColumn === columnKey) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(columnKey);
+      setSortDirection("asc");
+    }
   };
 
-  const handleViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newView = event.target.value;
-    setSelectedView(newView);
-    onViewChange(newView);
+  // Memoized data filtering and sorting
+  const filteredAndSortedData = useMemo(() => {
+    let filteredData = data;
+
+    // Filter based on CustomAutoComplete selection
+    if (selectedFilter && selectedFilter !== "All") {
+      filteredData = data.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(selectedFilter.toLowerCase()),
+        ),
+      );
+    }
+
+    // Filter by search term
+    if (searchTerm) {
+      filteredData = filteredData.filter((item) =>
+        Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
+      );
+    }
+
+    if (sortColumn) {
+      filteredData = filteredData.sort((a, b) => {
+        const aValue = a[sortColumn];
+        const bValue = b[sortColumn];
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return sortDirection === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+        }
+
+        return 0;
+      });
+    }
+
+    return filteredData;
+  }, [data, selectedFilter, searchTerm, sortColumn, sortDirection]);
+
+  // Pagination logic
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * limitPerPage;
+    return filteredAndSortedData.slice(startIndex, startIndex + limitPerPage);
+  }, [filteredAndSortedData, currentPage, limitPerPage]);
+
+  const handleFilterChange = (value: string) => {
+    setSelectedFilter(value);
+    onFilterChange(value);
   };
 
   return (
     <div
-      className={`rounded-lg shadow-lg bg-neutral-400 p-4  ${containerHeight} ${containerWidth}`}
+      className={`rounded-lg shadow-lg bg-neutral-400 p-4 ${containerHeight} ${containerWidth}`}
     >
       {/* Toolbar */}
       <div className="flex justify-between items-center mb-4">
-        <div className="bg-neutral-50 rounded-lg ">
-          <h2 className="text-3xl font-bold px-4 py-2 ">{tableTitle}</h2>
+        <div className="bg-neutral-50 rounded-lg">
+          <h2 className="text-3xl font-bold px-4 py-2">{tableTitle}</h2>
         </div>
         <div className="flex space-x-2">
-          <Select
-            onValueChange={handleFilterChange}
-            value={selectedFilter || ""}
-          >
-            <SelectTrigger className="w-[180px] bg-neutral-50">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-neutral-700" />{" "}
-                {selectedFilter ? (
-                  <SelectValue />
-                ) : (
-                  <span className="text-neutral-400">Filtrer Par...</span>
-                )}
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Filtres</SelectLabel>
-                {filters.map((filter) => (
-                  <SelectItem key={filter.key} value={filter.key}>
-                    {filter.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Select onValueChange={handleViewChange} value={selectedView || ""}>
-            <SelectTrigger className="w-[180px] bg-neutral-50 ">
-              <SelectValue placeholder="Select a view" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>View Options</SelectLabel>
-                {viewOptions.map((view) => (
-                  <SelectItem key={view.key} value={view.value}>
-                    {view.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          {/* Custom AutoComplete for filtering */}
+          <CustomAutoComplete
+            items={filters}
+            onFilterChange={handleFilterChange} // Pass filter change handler
+            size="large" // Make the component and popover bigger
+            showViewMore={false} // Remove View More button
+          />
+          {/* Search Input */}
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 rounded-md bg-muted text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+            />
+          </div>
         </div>
         <TooltipProvider>
           <Tooltip delayDuration={200}>
@@ -182,63 +201,86 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
         </TooltipProvider>
       </div>
 
-      {/* Table Container for Scrollable Table */}
+      {/* Table Container */}
       <div
-        className={`overflow-auto ${tableHeight} ${tableWidth} border-2 border-neutral-600 rounded-md`}
+        className={`overflow-auto ${tableHeight} border-2 border-neutral-600 rounded-md`}
+        style={{ width: tableWidth }}
       >
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr>
+        <Table
+          className="bg-gray-50"
+          style={{ tableLayout: "fixed", width: "100%" }}
+        >
+          <TableCaption>{tableCaption}</TableCaption>
+          <TableHeader className="bg-gray-800 ">
+            <TableRow className="hover:bg-gray-800">
               {columnsConfig.map((column) => (
-                <th
+                <TableHead
                   key={column.key}
-                  className="px-4 py-2 text-left bg-neutral-500 sticky top-0"
+                  className="cursor-pointer "
+                  onClick={() => handleSort(column.key)}
+                  style={{ width: column.width }}
                 >
                   {column.label}
-                </th>
+                  {sortColumn === column.key && (
+                    <span className="ml-2">
+                      {sortDirection === "asc" ? "▲" : "▼"}
+                    </span>
+                  )}
+                </TableHead>
               ))}
               {showActions && (
-                <th className="px-4 py-2 bg-neutral-500 sticky top-0">
-                  Actions
-                </th>
+                <TableHead className="w-[150px]">Actions</TableHead>
               )}
-            </tr>
-          </thead>
-          <tbody>
-            {displayData.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className={
-                  rowIndex % 2 === 0 ? "bg-neutral-300" : "bg-neutral-300"
-                }
-              >
-                {columnsConfig.map((column) => (
-                  <td key={column.key} className="px-4 py-2">
-                    {column.render
-                      ? column.render(row[column.key], row)
-                      : row[column.key]}
-                  </td>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading
+              ? Array.from({ length: limitPerPage }).map((_, index) => (
+                  <TableRow key={index}>
+                    {columnsConfig.map((column, colIndex) => (
+                      <TableCell key={colIndex}>
+                        <Skeleton className="w-full h-10" />
+                      </TableCell>
+                    ))}
+                    {showActions && (
+                      <TableCell>
+                        <Skeleton className="w-full h-10" />
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              : paginatedData.map((row, rowIndex) => (
+                  <TableRow key={rowIndex}>
+                    {columnsConfig.map((column) => (
+                      <TableCell
+                        key={column.key}
+                        style={{ width: column.width }}
+                      >
+                        {column.render
+                          ? column.render(row[column.key], row)
+                          : row[column.key]}
+                      </TableCell>
+                    ))}
+                    {showActions && (
+                      <TableCell className="flex space-x-2">
+                        <button
+                          onClick={() => onEdit(row)}
+                          className="bg-indigo-500 text-white px-2 py-1 rounded"
+                        >
+                          <Edit2 />
+                        </button>
+                        <button
+                          onClick={() => onDelete(row)}
+                          className="bg-red-500 text-white px-2 py-1 rounded"
+                        >
+                          <Trash2 />
+                        </button>
+                      </TableCell>
+                    )}
+                  </TableRow>
                 ))}
-                {showActions && (
-                  <td className="px-4 py-2 flex space-x-2">
-                    <button
-                      onClick={() => onEdit(row)}
-                      className="bg-indigo-500 text-white px-2 py-1 rounded"
-                    >
-                      <Edit2 />
-                    </button>
-                    <button
-                      onClick={() => onDelete(row)}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      <Trash2 />
-                    </button>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Pagination */}
@@ -266,8 +308,7 @@ const DeployableTable: React.FC<DeployableTableProps> = ({
               "px-2 py-2 rounded-full transition-transform duration-150 ease-in-out",
               currentPage === totalPages
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-indigo-600 shadow-lg hover:scale-105 text-white",
-              "active:scale-95",
+                : "bg-indigo-600 hover:scale-105 text-white",
             )}
           >
             <ArrowRight />

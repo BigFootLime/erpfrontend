@@ -1,139 +1,241 @@
-import { Input } from "../../@/componentsui/ui/input";
+import React, { useRef, useState } from "react";
+import { Controller } from "react-hook-form";
+import { PlusCircle, Check } from "lucide-react";
 import { Skeleton } from "../../@/componentsui/ui/skeleton";
-import FormLabel from "./FormLabel";
-import React, { useState, useEffect } from "react";
-import { Search, ChevronDown } from "lucide-react"; // Import the magnifying glass and down arrow icon from lucide-react
+import FormLabel from "../../components/ui/FormLabel";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverContentWithoutPortal,
+} from "../../@/componentsui/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+  CommandInput,
+} from "../../@/componentsui/ui/command";
+import FormAutocompleteButton from "./FormAutoCompleteButton";
+import CustomButton from "./CustomButton";
 
-function FormAutoComplete({
+interface CommandItemProps {
+  name: string;
+  value: string;
+  key?: string;
+  props?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+}
+
+interface CommandGroupProps {
+  props: {
+    heading: string;
+  };
+  [key: string]: any;
+}
+
+interface ItemsProps {
+  [key: number]: {
+    commandGroup: CommandGroupProps;
+  };
+}
+
+interface FormAutocompleteProps<TFieldValues extends FieldValues> {
+  label: string;
+  name: string;
+  control: Control<TFieldValues>;
+  simple?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  register: UseFormRegister<TFieldValues>;
+  validation?: Record<string, any>;
+  error?: FieldError;
+  items: ItemsProps;
+  displayItems?: number;
+}
+
+function FormAutocomplete<TFieldValues extends FieldValues>({
   label: propsLabel,
   name: propsName,
-  type: propsType,
-  classNameInput: propsClassNameInput,
+  control: propsControl,
+  simple: propsSimple,
   disabled: propsDisabled,
   loading: propsLoading,
   register: propsRegister,
   validation: propsValidation,
-  placeholder: propsPlaceholder,
   error: propsError,
-  light: propsLight,
-  suggestions: propsSuggestions = [], // Array of suggestions
-  onInputChange, // Function to call when input changes
-  onSelectSuggestion, // Function to call when a suggestion is selected
-}) {
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [userInput, setUserInput] = useState("");
+  items: propsItems,
+  displayItems: propsDisplayItems,
+}: FormAutocompleteProps<TFieldValues>) {
+  const [open, setOpen] = useState(false);
+  const [viewMore, setViewMore] = useState(propsDisplayItems || 50);
+  const divRef = useRef<HTMLDivElement>(null);
+  const [filterBool, setFilterBool] = useState(false);
+  const [values, setValues] = useState<string>("");
 
-  useEffect(() => {
-    if (userInput && showSuggestions) {
-      const filtered = propsSuggestions.filter((suggestion) =>
-        suggestion.toLowerCase().includes(userInput.toLowerCase()),
-      );
-      setFilteredSuggestions(filtered);
-    } else {
-      setFilteredSuggestions([]);
-    }
-  }, [userInput, propsSuggestions, showSuggestions]);
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setUserInput(value);
-    onInputChange?.(value);
-    if (!showSuggestions) setShowSuggestions(true);
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    setUserInput(suggestion);
-    setShowSuggestions(false);
-    onSelectSuggestion?.(suggestion);
-  };
-
-  const toggleSuggestions = () => {
-    setShowSuggestions(!showSuggestions);
-  };
-
-  const renderSuggestions = () => {
-    if (showSuggestions && userInput && filteredSuggestions.length > 0) {
-      return (
-        <ul className="border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto bg-white">
-          {filteredSuggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleSuggestionClick(suggestion)}
-              className="p-2 cursor-pointer hover:bg-gray-200"
-            >
-              {suggestion}
-            </li>
-          ))}
-        </ul>
-      );
-    } else if (showSuggestions && !userInput && propsSuggestions.length > 0) {
-      return (
-        <ul className="border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto bg-white">
-          {propsSuggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleSuggestionClick(suggestion)}
-              className="p-2 cursor-pointer hover:bg-gray-200"
-            >
-              {suggestion}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return null;
+  const handleViewMore = () => {
+    setViewMore(viewMore + (propsDisplayItems || 50));
   };
 
   return (
-    <div className="w-full relative">
-      <FormLabel
-        label={propsLabel}
-        name={propsName}
-        required={propsValidation?.required}
-        className={`${propsLight ? "text-black" : ""}`}
-      />
-      {propsLoading ? (
-        <Skeleton className="w-full h-10" />
-      ) : (
-        <div className="relative w-full">
-          <div className="relative flex items-center">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="text-gray-500" />
-            </span>
-            <Input
-              id={propsName}
-              disabled={propsDisabled}
-              type={propsType}
-              {...propsRegister(propsName, propsValidation)}
-              className={`pl-10 pr-10 border rounded-md w-full border-indigo-500 hover:border-indigo-500 focus:border-indigo-500 ${
-                propsClassNameInput || ""
-              } ${propsError ? "!border-red-500" : ""}`}
-              placeholder={propsPlaceholder}
-              value={userInput}
-              onChange={handleInputChange}
-              autoComplete="off"
+    <Controller
+      control={propsControl}
+      name={propsName}
+      {...propsRegister(propsName, propsValidation)}
+      render={({ field: { onChange, value, ref } }) => {
+        return (
+          <div className="w-full" ref={divRef}>
+            <FormLabel
+              label={propsLabel}
+              name={propsName.split(".").join("")}
+              required={propsValidation?.required}
+              className={propsError ? "text-red-500" : "text-black"}
             />
-            <button
-              type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3"
-              onClick={toggleSuggestions}
-            >
-              <ChevronDown
-                className={`text-gray-500 transform transition-transform ${
-                  showSuggestions ? "rotate-180" : ""
-                }`}
-              />
-            </button>
+            {propsLoading ? (
+              <Skeleton className="w-full h-10" />
+            ) : (
+              <Popover
+                id={propsName.split(".").join("")}
+                ref={ref}
+                open={open}
+                onOpenChange={setOpen}
+              >
+                <PopoverTrigger className="w-full">
+                  <FormAutocompleteButton
+                    error={propsError}
+                    disabled={propsDisabled}
+                    simple={propsSimple}
+                    value={value}
+                    onChange={onChange}
+                    items={propsItems}
+                    setOpen={setOpen}
+                  />
+                </PopoverTrigger>
+                <PopoverContentWithoutPortal
+                  className="p-0 bg-white"
+                  style={{
+                    width: `${divRef.current?.offsetWidth}px`,
+                  }}
+                >
+                  <Command>
+                    <CommandInput
+                      className="bg-gray-50 border-none"
+                      placeholder="Rechercher ..."
+                      onValueChange={(e) => {
+                        setFilterBool(e !== "");
+                        setValues(e);
+                      }}
+                    />
+
+                    <CommandList className="scrollsm overflow-x-auto bg-white">
+                      <CommandEmpty>Aucune donnée</CommandEmpty>
+                      {Object.keys(propsItems).map((key) => {
+                        const { commandGroup } = propsItems[key];
+
+                        return (
+                          <CommandGroup key={key} {...commandGroup.props}>
+                            {Object.keys(commandGroup)
+                              .filter((item, index) => {
+                                if (item === "props") return false;
+                                if (propsDisplayItems) {
+                                  if (!filterBool) {
+                                    return index < viewMore;
+                                  }
+                                  if (
+                                    values &&
+                                    values.toLowerCase().length >= 3
+                                  ) {
+                                    return commandGroup[item].commandItem.name
+                                      .toLowerCase()
+                                      .includes(values.toLowerCase());
+                                  }
+                                  return index < viewMore;
+                                }
+                                return true;
+                              })
+                              .map((item) => {
+                                const { commandItem } = commandGroup[item];
+                                return (
+                                  <CommandItem
+                                    key={commandItem.key || commandItem.name}
+                                    value={commandItem.value}
+                                    className="p-0 bg-white"
+                                    data-disabled={false} // Explicitly set data-disabled to false
+                                  >
+                                    <button
+                                      type="button"
+                                      className="w-full flex flex-row px-2 py-1 text-left"
+                                      onClick={() => {
+                                        if (propsSimple) {
+                                          onChange(commandItem.value);
+                                          setOpen(false);
+                                          return;
+                                        }
+                                        if (Array.isArray(value)) {
+                                          if (
+                                            value.includes(commandItem.value)
+                                          ) {
+                                            onChange(
+                                              value.filter(
+                                                (v: string) =>
+                                                  v !== commandItem.value,
+                                              ),
+                                            );
+                                          } else {
+                                            onChange([
+                                              ...value,
+                                              commandItem.value,
+                                            ]);
+                                          }
+                                        }
+                                      }}
+                                    >
+                                      {(propsSimple &&
+                                        value === commandItem.value) ||
+                                      (!propsSimple &&
+                                        Array.isArray(value) &&
+                                        value.includes(commandItem.value)) ? (
+                                        <Check className="!h-4 !w-4 mr-2" />
+                                      ) : (
+                                        <div className="w-6" />
+                                      )}
+                                      {commandItem.name}
+                                    </button>
+                                  </CommandItem>
+                                );
+                              })}
+                            {(Object.keys(commandGroup).length > 3000 ||
+                              propsDisplayItems) && (
+                              <CommandItem className="p-0 bg-white">
+                                <CustomButton
+                                  type="button"
+                                  icon={
+                                    <PlusCircle className="!h-4 !w-4 mr-2" />
+                                  }
+                                  text="Voir plus"
+                                  className="bg-blue-600 w-full text-white h-8"
+                                  onClick={handleViewMore}
+                                />
+                              </CommandItem>
+                            )}
+                          </CommandGroup>
+                        );
+                      })}
+                    </CommandList>
+                  </Command>
+                </PopoverContentWithoutPortal>
+              </Popover>
+            )}
+            {propsError && (
+              <span className="text-xs text-red-500">
+                {propsError?.message}
+              </span>
+            )}
           </div>
-          {renderSuggestions()}
-        </div>
-      )}
-      {propsError && (
-        <span className="text-sm text-red-500">{propsError?.message}</span>
-      )}
-    </div>
+        );
+      }}
+    />
   );
 }
 
-export default FormAutoComplete;
+export default FormAutocomplete;

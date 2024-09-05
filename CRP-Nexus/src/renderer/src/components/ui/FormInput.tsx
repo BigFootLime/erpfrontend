@@ -4,43 +4,57 @@ import FormLabel from "./FormLabel";
 import React from "react";
 
 function FormInput({
-  label: propsLabel,
-  name: propsName,
-  type: propsType,
-  classNameInput: propsClassNameInput,
-  disabled: propsDisabled,
-  loading: propsLoading,
-  register: propsRegister,
-  validation: propsValidation,
-  placeholder: propsPlaceholder,
-  error: propsError,
-  light: propsLight, // New prop
+  label,
+  name,
+  type = "text",
+  classNameInput = "",
+  disabled = false,
+  loading = false,
+  register,
+  validation = {},
+  placeholder = "",
+  error,
+  light = false, // Default to false
+  maxLength, // Make maxLength dynamic, no default set
+  onKeyPress, // Dynamic onKeyPress handler
+  onChange, // Dynamic onChange handler
 }) {
+  // Default onKeyPress handler to allow only numeric input if none is provided
+  const handleKeyPress = (e) => {
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault(); // Prevent non-numeric characters
+    }
+  };
+
   return (
     <div className="w-full">
       <FormLabel
-        label={propsLabel}
-        name={propsName}
-        required={propsValidation?.required}
-        className={`${propsLight ? "text-black" : ""}`} // Apply black text color if `light` is true
+        label={label}
+        name={name}
+        required={validation?.required}
+        className={`${light ? "text-black" : ""}`} // Apply black text color if `light` is true
       />
-      {propsLoading ? (
+      {loading ? (
         <Skeleton className="w-full h-10" />
       ) : (
         <Input
-          id={propsName}
-          disabled={propsDisabled}
-          type={propsType}
-          {...propsRegister(propsName, propsValidation)}
+          id={name}
+          disabled={disabled}
+          type={type}
+          {...register(name, validation)}
           className={`border rounded-md w-full border-indigo-500 hover:border-indigo-500 focus:border-indigo-500 ${
-            propsClassNameInput || ""
-          } ${propsError ? "!border-red-500" : ""}`}
-          placeholder={propsPlaceholder}
+            classNameInput
+          } ${error ? "!border-red-500" : ""}`}
+          placeholder={placeholder}
+          maxLength={maxLength} // Dynamic maxLength
+          onKeyPress={
+            onKeyPress ||
+            (type === "text" && maxLength === 14 ? handleKeyPress : undefined)
+          } // Use custom or default onKeyPress
+          onChange={onChange} // Dynamic onChange handler
         />
       )}
-      {propsError && (
-        <span className="text-sm text-red-500">{propsError?.message}</span>
-      )}
+      {error && <span className="text-sm text-red-500">{error?.message}</span>}
     </div>
   );
 }

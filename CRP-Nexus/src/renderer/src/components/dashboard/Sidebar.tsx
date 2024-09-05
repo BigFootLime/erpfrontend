@@ -20,6 +20,8 @@ import {
   CurrencyEuroIcon,
   WrenchScrewdriverIcon,
   XMarkIcon,
+  UserGroupIcon,
+  BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -31,9 +33,18 @@ import { LogOut, PackagePlus } from "lucide-react";
 // Import your components
 import Dashboard from "./Dashboard";
 import DevisLandingPage from "../devis/devisLandingPage";
+import ClientsLandingPage from "../clients/clientsLandingPage";
+import FournisseursLandingPage from "../fournisseurs/fournisseursLandingPage";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, component: "Dashboard" },
+  { name: "Clients", href: "#", icon: UserGroupIcon, component: "Clients" },
+  {
+    name: "Fournisseurs",
+    href: "#",
+    icon: BuildingOffice2Icon,
+    component: "Suppliers",
+  },
   {
     name: "Commande Client",
     href: "#",
@@ -125,6 +136,10 @@ export default function Sidebar() {
         return <Dashboard />;
       case "Devis":
         return <DevisLandingPage />;
+      case "Clients":
+        return <ClientsLandingPage />;
+      case "Suppliers":
+        return <FournisseursLandingPage />;
       // Add more cases for other components
       default:
         return <Dashboard />;
