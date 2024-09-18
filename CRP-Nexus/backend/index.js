@@ -28,7 +28,7 @@ app.use(
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", "data:"],
     },
-  })
+  }),
 );
 
 // Simple root route
