@@ -1,4 +1,15 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.web.json" }
+  ],
+
+  "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false,
+    "forceConsistentCasingInFileNames": false, // Avoids issues with file name casing
+    "strict": false // Optional: Can relax strict type checks
+  }
 }

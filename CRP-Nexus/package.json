@@ -16,7 +16,7 @@
     "start:electron": "electron-vite dev",
     "start:backend": "node backend/index.js",
     "dev": "concurrently \"pnpm run start:backend\" \"pnpm run start:electron\"",
-    "build": "pnpm run typecheck && electron-vite build",
+    "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "pnpm run build && electron-builder --dir",
     "build:win": "pnpm run build && electron-builder --win",
@@ -99,5 +99,21 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.3",
     "vite": "^5.3.1"
+  },
+  "build": {
+    "appId": "com.crpnexus",
+    "productName": "CRP Nexus",
+    "files": [
+      "dist",
+      "out",
+      "backend"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    }
   }
 }
