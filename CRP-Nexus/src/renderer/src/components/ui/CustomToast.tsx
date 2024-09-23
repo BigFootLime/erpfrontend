@@ -1,8 +1,8 @@
 "use client";
 
-import { useToast } from "../../@/hooks/use-toast";
-import { Button } from "../../@/componentsui/ui/button";
-import { ToastAction } from "../../@/componentsui/ui/toast";
+import { useToast } from "../../../../../@/hooks/use-toast";
+import { Button } from "../../../../../@/components/ui/button";
+import { ToastAction } from "../../../../../@/components/ui/toast";
 import { ReactNode } from "react";
 
 // Define prop types for full customization

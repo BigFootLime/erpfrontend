@@ -5,9 +5,37 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
-    "src/renderer/src/@/componentsui/ui/badge.tsx"
+    "@/components/ui/badge.tsx",
+    "@/components/ui/alert-dialog.tsx",
+    "@/components/ui/avatar.tsx",
+    "@/components/ui/button.tsx",
+    "@/components/ui/card.tsx",
+    "@/components/ui/chart.tsx",
+    "@/components/ui/checkbox.tsx",
+    "@/components/ui/command.tsx",
+    "@/components/ui/dialog.tsx",
+    "@/components/ui/dropdown-menu.tsx",
+    "@/components/ui/gradient-background-effect.tsx",
+    "@/components/ui/input-otp.tsx",
+    "@/components/ui/input.tsx",
+    "@/components/ui/label.tsx",
+    "@/components/ui/popover.tsx",
+    "@/components/ui/radio-group.tsx",
+    "@/components/ui/select.tsx",
+    "@/components/ui/separator.tsx",
+    "@/components/ui/sheet.tsx",
+    "@/components/ui/sidebar.tsx",
+    "@/components/ui/skeleton.tsx",
+    "@/components/ui/table.tsx",
+    "@/components/ui/text-generate-effect.tsx",
+    "@/components/ui/textarea.tsx",
+    "@/components/ui/toast.tsx",
+    "@/components/ui/toaster.tsx",
+    "@/components/ui/tooltip.tsx",
+    "@/lib"
   ],
   "compilerOptions": {
+    "sourceMap": true,
     "allowJs": true,
     "skipLibCheck": true,
     "noEmitOnError": false,
@@ -15,8 +43,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@renderer/*": ["src/renderer/src/*"],
-      "@components/*": ["src/renderer/src/@/componentsui/ui/*"]
+      "@/*": ["src/*"],
+      "@renderer/*": ["src/renderer/src/*"]
     }
   }
 }

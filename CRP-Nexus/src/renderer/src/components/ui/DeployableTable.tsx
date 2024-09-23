@@ -13,9 +13,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../@/componentsui/ui/tooltip";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
-import { Input } from "../../@/componentsui/ui/input";
+} from "../../../../../@/components/ui/tooltip";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
+import { Input } from "../../../../../@/components/ui/input";
 import {
   Table,
   TableHeader,
@@ -24,7 +24,7 @@ import {
   TableBody,
   TableCell,
   TableCaption,
-} from "../../@/componentsui/ui/table";
+} from "../../../../../@/components/ui/table";
 import classNames from "classnames";
 
 interface ColumnConfig {

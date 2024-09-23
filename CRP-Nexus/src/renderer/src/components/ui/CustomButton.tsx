@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Loader2 } from "lucide-react";
-import { Button } from "../../@/componentsui/ui/button";
+import { Button } from "../../../../../@/components/ui/button";
 
 // Type definitions for props
 interface CustomButtonProps {

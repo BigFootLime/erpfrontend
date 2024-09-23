@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { BagroundGradientEffect } from "../../@/componentsui/ui/gradient-background-effect";
-import { TextGenerateEffect } from "../../@/componentsui/ui/text-generate-effect";
-import { cn } from "../../lib/utils";
+import { BagroundGradientEffect } from "../../../../../@/components/ui/gradient-background-effect";
+import { TextGenerateEffect } from "../../../../../@/components/ui/text-generate-effect";
+import { cn } from "../../../../../@/lib/utils";
 import { Loading } from "../ui/LoadingComponent";
 
 export const Greeting = () => {

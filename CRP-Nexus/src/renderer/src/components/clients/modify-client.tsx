@@ -1,10 +1,10 @@
-import { Button } from "@renderer/@/componentsui/ui/button";
+import { Button } from "../../../../../@/components/ui/button";
 import FormInput from "../ui/FormInput";
 import { Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormAutocomplete from "../ui/FormAutoComplete";
-import { useToast } from "../../@/hooks/use-toast"; // Import useToast hook
+import { useToast } from "../../../../../@/hooks/use-toast"; // Import useToast hook
 
 export default function ModifyClientForm({ clientId, onModifyClient }) {
   const { toast } = useToast(); // Initialize the toast

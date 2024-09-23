@@ -16,8 +16,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../../@/componentsui/ui/select";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+} from "../../../../../@/components/ui/select";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 // Import components
 import FormLabel from "./FormLabel";
 import CustomButton from "./CustomButton";

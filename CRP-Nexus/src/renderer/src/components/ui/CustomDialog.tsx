@@ -7,8 +7,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "../../@/componentsui/ui/dialog";
-import { Button } from "../../@/componentsui/ui/button";
+} from "../../../../../@/components/ui/dialog";
+import { Button } from "../../../../../@/components/ui/button";
 
 interface CustomDialogProps {
   defaultOpen?: boolean;

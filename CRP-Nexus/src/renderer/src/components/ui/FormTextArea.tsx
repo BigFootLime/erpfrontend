@@ -1,6 +1,6 @@
 import React from "react";
-import { Textarea } from "../../@/componentsui/ui/textarea";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+import { Textarea } from "../../../../../@/components/ui/textarea";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 import FormLabel from "./FormLabel";
 
 function FormTextArea({

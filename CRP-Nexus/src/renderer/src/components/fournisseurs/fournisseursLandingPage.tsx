@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import DeployableTable from "../ui/DeployableTable";
-import { Badge } from "@renderer/@/componentsui/ui/badge";
+import { Badge } from "../../../../../@/components/ui/badge";
 import CustomSheet from "../ui/CustomSheet";
 import { BanknoteIcon, CreditCardIcon, LandmarkIcon } from "lucide-react";
 import CreateSupplierForm from "./create-fournisseur";
 import ModifySuppliertForm from "./modify-fournisseur";
 import CustomAlertDialog from "../ui/CustomAlertDialog"; // Import the custom alert dialog component
-import { toast } from "@renderer/@/hooks/use-toast";
+import { toast } from "../../../../../@/hooks/use-toast";
 import { CurrencyEuroIcon } from "@heroicons/react/24/outline";
 
 const FournisseursLandingPage = () => {

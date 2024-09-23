@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import FormLabel from "./FormLabel";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 
 export function FormOTP({ label, name, disabled, loading, validation, error }) {
   const { register, setValue } = useFormContext();

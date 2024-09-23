@@ -1,7 +1,7 @@
 // Import libs
 import React from "react";
 // Import shad components
-import { Label } from "../../@/componentsui/ui/label";
+import { Label } from "../../../../../@/components/ui/label";
 
 function FormLabel({
   label: propsLabel,

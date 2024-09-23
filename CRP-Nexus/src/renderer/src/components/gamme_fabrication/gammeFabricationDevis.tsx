@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import FormInput from "../ui/FormInput";
-import { Button } from "@renderer/@/componentsui/ui/button";
+import { Button } from "../../../../../@/components/ui/button";
 import { Save, Trash2 } from "lucide-react";
 import FormAutoComplete from "../ui/FormAutoComplete";
 import DeployableTable from "../ui/DeployableTable";

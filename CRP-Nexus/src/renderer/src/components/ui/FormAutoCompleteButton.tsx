@@ -1,7 +1,7 @@
 import React from "react";
 import { X, ChevronDown } from "lucide-react";
-import { Button } from "../../@/componentsui/ui/button";
-import { Label } from "../../@/componentsui/ui/label";
+import { Button } from "../../../../../@/components/ui/button";
+import { Label } from "../../../../../@/components/ui/label";
 
 // Type definitions for props
 interface CommandItem {

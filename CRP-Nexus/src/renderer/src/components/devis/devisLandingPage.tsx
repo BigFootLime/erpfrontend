@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DeployableTable from "../ui/DeployableTable";
-import { Badge } from "@renderer/@/componentsui/ui/badge";
+import { Badge } from "../../../../../@/components/ui/badge";
 import CustomSheet from "../ui/CustomSheet";
 import CreateDevisForm from "./create-devis";
 

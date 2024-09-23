@@ -8,8 +8,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../@/componentsui/ui/sheet";
-import { Button } from "../../@/componentsui/ui/button";
+} from "../../../../../@/components/ui/sheet";
+import { Button } from "../../../../../@/components/ui/button";
 
 interface CustomSheetProps {
   defaultOpen?: boolean;

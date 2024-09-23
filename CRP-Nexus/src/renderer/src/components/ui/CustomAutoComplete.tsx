@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { PlusCircle, Check } from "lucide-react";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 import FormLabel from "../../components/ui/FormLabel";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverContentWithoutPortal,
-} from "../../@/componentsui/ui/popover";
+} from "../../../../../@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -15,7 +15,7 @@ import {
   CommandItem,
   CommandList,
   CommandInput,
-} from "../../@/componentsui/ui/command";
+} from "../../../../../@/components/ui/command";
 import CustomButton from "./CustomButton";
 import CustomAutoCompleteButton from "./CustomAutoCompleteButton"; // Created a separate button component
 

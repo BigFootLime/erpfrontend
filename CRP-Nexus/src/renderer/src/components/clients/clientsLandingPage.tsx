@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import DeployableTable from "../ui/DeployableTable";
-import { Badge } from "@renderer/@/componentsui/ui/badge";
+import { Badge } from "../../../../../@/components/ui/badge";
 import CustomSheet from "../ui/CustomSheet";
 import { BanknoteIcon, CreditCardIcon } from "lucide-react";
 import CreateClientForm from "./create-client";
 import ModifyClientForm from "./modify-client";
 import CustomAlertDialog from "../ui/CustomAlertDialog"; // Import the custom alert dialog component
-import { toast } from "@renderer/@/hooks/use-toast";
+import { toast } from "../../../../../@/hooks/use-toast";
 
 const ClientsLandingPage = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);

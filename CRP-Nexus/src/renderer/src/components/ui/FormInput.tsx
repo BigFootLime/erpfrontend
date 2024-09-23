@@ -1,5 +1,5 @@
-import { Input } from "../../@/componentsui/ui/input";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+import { Input } from "../../../../../@/components/ui/input";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 import FormLabel from "./FormLabel";
 import React from "react";
 

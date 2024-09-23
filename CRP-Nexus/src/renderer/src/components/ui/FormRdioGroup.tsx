@@ -1,10 +1,10 @@
 import React from "react";
-import { Label } from "../../@/componentsui/ui/label";
+import { Label } from "../../../../../@/components/ui/label";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "../../@/componentsui/ui/radio-group";
-import { Skeleton } from "../../@/componentsui/ui/skeleton";
+} from "../../../../../@/components/ui/radio-group";
+import { Skeleton } from "../../../../../@/components/ui/skeleton";
 import FormLabel from "./FormLabel";
 
 function FormRadioGroup({

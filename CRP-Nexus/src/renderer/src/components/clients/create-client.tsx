@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormInput from "../ui/FormInput";
-import { Button } from "@renderer/@/componentsui/ui/button";
+import { Button } from "../../../../../@/components/ui/button";
 import { Save, Trash2 } from "lucide-react";
 import FormAutocomplete from "../ui/FormAutoComplete";
-import { useToast } from "../../@/hooks/use-toast";
+import { useToast } from "../../../../../@/hooks/use-toast";
 
 export default function CreateClientForm({ onAddClient }) {
   const { toast } = useToast();

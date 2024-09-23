@@ -14,10 +14,13 @@ export default defineConfig({
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
-        '@': resolve(__dirname, 'src/renderer/src'),
+        "@components": resolve("src/renderer/src/@/componentsui/ui/"),
+        "@": resolve(__dirname, "src/renderer/src"),
       },
     },
     plugins: [react()],
-    
+    build: {
+      sourcemap: true, // Make sure this is set
+    },
   },
 });
